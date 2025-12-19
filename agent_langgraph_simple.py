@@ -63,23 +63,28 @@ def add_item_tool(telefone: str, produto: str, quantidade: float = 1.0, observac
     return "❌ Erro ao adicionar item. Tente novamente."
 
 @tool
-def view_cart_tool(telefone: str) -> str:
+def view_cart_tool(telefone: str, frete: float = 0.0) -> str:
     """
     Ver os itens atuais no carrinho do cliente.
+    Use para mostrar o resumo antes de confirmar o pedido.
+    
+    Args:
+    - telefone: Telefone do cliente
+    - frete: Valor do frete para incluir no resumo (opcional)
     """
     items = get_cart_items(telefone)
     if not items:
         return "🛒 O carrinho está vazio."
     
-    summary = ["🛒 **Carrinho Atual:**"]
-    total_estimado = 0.0
+    summary = ["🛒 **Resumo do Pedido:**"]
+    subtotal_produtos = 0.0
     for i, item in enumerate(items):
         qtd = item.get("quantidade", 1)
         nome = item.get("produto", "?")
         obs = item.get("observacao", "")
         preco = item.get("preco", 0.0)
         subtotal = qtd * preco
-        total_estimado += subtotal
+        subtotal_produtos += subtotal
         
         desc = f"{i+1}. {nome} (x{qtd})"
         if preco > 0:
@@ -88,8 +93,14 @@ def view_cart_tool(telefone: str) -> str:
             desc += f" [Obs: {obs}]"
         summary.append(desc)
     
-    if total_estimado > 0:
-        summary.append(f"\n💰 **Total Estimado:** R$ {total_estimado:.2f}")
+    summary.append(f"\n💰 **Subtotal produtos:** R$ {subtotal_produtos:.2f}")
+    
+    if frete > 0:
+        summary.append(f"� **Frete:** R$ {frete:.2f}")
+        total_geral = subtotal_produtos + frete
+        summary.append(f"✅ **TOTAL:** R$ {total_geral:.2f}")
+    else:
+        summary.append(f"✅ **TOTAL:** R$ {subtotal_produtos:.2f}")
         
     return "\n".join(summary)
 
