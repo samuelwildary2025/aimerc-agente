@@ -506,8 +506,14 @@ async def webhook(req: Request, tasks: BackgroundTasks):
                     set_agent_cooldown(tel, ttl)
                     logger.info(f"🙋 Human Takeover ativado para {tel} - IA pausa por {ttl//60}min")
             
-            try: get_session_history(tel).add_ai_message(txt)
-            except: pass
+            # Salvar mensagem do atendente humano no histórico
+            try:
+                history = get_session_history(tel)
+                history.add_ai_message(f"[ATENDENTE] {txt}")
+                logger.info(f"💬 Mensagem do atendente salva no histórico: {tel}")
+            except Exception as e:
+                logger.error(f"❌ Erro ao salvar mensagem do atendente: {e}")
+            
             return JSONResponse(content={"status":"ignored_self"})
 
         num = re.sub(r"\D","",tel)
