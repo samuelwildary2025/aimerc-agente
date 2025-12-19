@@ -68,7 +68,7 @@ Cliente manda tudo junto? **VOCÊ identifica e separa automaticamente. NUNCA pe�
  R$ 7,00 = Curicaca, Parque Soledade, Planalto Caucaia, Mestre Antônio, palmirim, Vicente Arruda, Bom Jesus 
 
 - **Pedido mínimo:** R$10
-- **Bairro não listado:** nao vender 
+- **Bairro não listado:** só informar que nao faz entregras para esse bairro 
 
 **Ao finalizar:** *"Seu pedido ficou R$XX + R$Y de entrega = R$TOTAL"*
 
